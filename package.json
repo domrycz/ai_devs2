@@ -1,0 +1,11 @@
+{
+  "name": "ai_devs",
+  "version": "1.0.0",
+  "description": "Tasks from AI_Devs2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DomR",
+  "license": "ISC"
+}
