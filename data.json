@@ -1,4 +1,5 @@
 {
   "url": "<URL HERE>",
-  "apikey": "<API KEY HERE>"
+  "apikey": "<API KEY HERE>",
+  "openAiKey": "<OPEN AI KEY HERE>"
 }
