@@ -14,7 +14,7 @@ export const fetchToken = async (url, taskName, apikey) => {
         });
         const data = await response.json();
 
-        if (data.code !== 0) throw new Error(`Error fetching token: ${data.msg}`);
+        if (data.code !== 0) throw new Error(data.msg);
 
         return data.token;
     } catch (error) {
@@ -27,7 +27,7 @@ export const getTaskData = async (url, token) => {
         const response = await fetch(`${url}/task/${token}`);
         const data = await response.json();
 
-        if (data.code !== 0) throw new Error(`Error fetching token: ${data.msg}`);
+        if (data.code !== 0) throw new Error(data.msg);
 
         console.log('Task data:', data);
 
@@ -48,7 +48,7 @@ export const postAnswer = async (url, token, answer) => {
         });
         const data = await response.json();
 
-        if (data.code !== 0) throw new Error(`Error posting task answer: ${data.msg}`);
+        if (data.code !== 0) throw new Error(data.msg);
 
         console.log(`### Final result: ${data.msg}`);
     } catch (error) {
