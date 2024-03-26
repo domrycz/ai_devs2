@@ -1,6 +1,6 @@
-const utils = require('../utils/utils');
+import { fetchInfo, fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
 
-const info = utils.fetchInfo();
+const info = fetchInfo();
 
 const taskName = 'helloapi';
 
@@ -10,16 +10,16 @@ const url = info.url;
 let accessToken;
 
 
-utils.fetchToken(url, taskName, apikey)
+fetchToken(url, taskName, apikey)
     .then(token => {
         if(token) {
             accessToken = token;
-            return utils.getTaskData(url, accessToken);
+            return getTaskData(url, accessToken);
         }
     })
     .then((data) => {
         const cookie = data.cookie;
-        utils.postAnswer(url, accessToken, cookie);
+        postAnswer(url, accessToken, cookie);
     })
     .catch(error => {
         console.log(`Error: ${error}`);

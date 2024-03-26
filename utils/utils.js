@@ -1,11 +1,11 @@
-const fs = require('fs');
+import fs from 'fs';
 
-exports.fetchInfo = () => {
+export const fetchInfo = () => {
     const data = fs.readFileSync('data.json', 'utf8');
     return JSON.parse(data);
 }
 
-exports.fetchToken = async (url, taskName, apikey) => {
+export const fetchToken = async (url, taskName, apikey) => {
     try {
         const response = await fetch(`${url}/token/${taskName}`, {
             method: 'POST',
@@ -22,7 +22,7 @@ exports.fetchToken = async (url, taskName, apikey) => {
     }
 }
 
-exports.getTaskData = async (url, token) => {
+export const getTaskData = async (url, token) => {
     try {
         const response = await fetch(`${url}/task/${token}`);
         const data = await response.json();
@@ -37,7 +37,7 @@ exports.getTaskData = async (url, token) => {
     }
 }
 
-exports.postAnswer = async (url, token, answer) => {
+export const postAnswer = async (url, token, answer) => {
     try {
         const response = await fetch(`${url}/answer/${token}`, {
             method: 'POST',

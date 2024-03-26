@@ -1,4 +1,4 @@
-exports.callModeration = async (openAiKey, inputToCheck) => {
+export const callModeration = async (openAiKey, inputToCheck) => {
     try {
         const moderationResponse = await fetch('https://api.openai.com/v1/moderations', {
             method: 'POST',

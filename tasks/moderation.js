@@ -1,7 +1,7 @@
-const utils = require('../utils/utils');
-const openAiUtils = require('../utils/open-ai-utils');
+import { fetchInfo, fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
+import { callModeration } from '../utils/open-ai-utils.js';
 
-const info = utils.fetchInfo();
+const info = fetchInfo();
 
 const taskName = 'moderation';
 
@@ -11,26 +11,26 @@ const openAiKey = info.openAiKey;
 
 let accessToken;
 
-utils.fetchToken(url, taskName, apikey)
+fetchToken(url, taskName, apikey)
     .then(token => {
         if(token) {
             accessToken = token;
-            return utils.getTaskData(url, accessToken);
+            return getTaskData(url, accessToken);
         }
     })
     .then(taskData => {
         const input = taskData.input;
-        return openAiUtils.callModeration(openAiKey, input);
+        return callModeration(openAiKey, input);
     })
     .then(moderationResults => {
         const answer =  processModerationResultsArray(moderationResults);
-        utils.postAnswer(url, accessToken, answer);
+        postAnswer(url, accessToken, answer);
     })
     .catch(error => {
         console.log(`Error: ${error}`);
     });
 
-processModerationResultsArray = (moderationResults) => {
+const processModerationResultsArray = (moderationResults) => {
     return moderationResults.map(result => {
         return result.flagged ? 1 : 0;
     });
