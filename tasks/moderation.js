@@ -1,30 +1,24 @@
-import { fetchInfo, fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
+import {fetchToken, getTaskData, postAnswer, systemInfo} from '../utils/utils.js';
 import { callModeration } from '../utils/open-ai-utils.js';
-
-const info = fetchInfo();
 
 const taskName = 'moderation';
 
-const apikey = info.apikey;
-const url = info.url;
-const openAiKey = info.openAiKey;
-
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if(token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then(taskData => {
         const input = taskData.input;
-        return callModeration(openAiKey, input);
+        return callModeration(systemInfo.openAiKey, input);
     })
     .then(moderationResults => {
         const answer =  processModerationResultsArray(moderationResults);
-        postAnswer(url, accessToken, answer);
+        postAnswer(accessToken, answer);
     })
     .catch(error => {
         console.log(`Error: ${error}`);

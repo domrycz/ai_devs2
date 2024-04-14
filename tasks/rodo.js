@@ -1,23 +1,18 @@
-import {fetchInfo, fetchToken, getTaskData, postAnswer} from '../utils/utils.js';
-
-const info = fetchInfo();
+import {fetchToken, getTaskData, postAnswer} from '../utils/utils.js';
 
 const taskName = 'rodo';
 
-const apikey = info.apikey;
-const url = info.url;
-
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then(() => {
-        postAnswer(url, accessToken, prepareUserPrompt());
+        postAnswer(accessToken, prepareUserPrompt());
     })
     .catch(error => {
         console.error(`# Error: ${error}`);
@@ -25,7 +20,7 @@ fetchToken(url, taskName, apikey)
 
 
 const prepareUserPrompt = () => {
-    return 'This is information about me. '  +
-        'I use %imie% for name, %nazwisko% for surname, %zawod% for occupation and %miasto% for city, ' +
+    return 'This is information about me. My name, surname, occupation and city where I live. '  +
+        'I always use %imie% for name, %nazwisko% for surname, %zawod% for occupation and %miasto% for city, ' +
         'because I cannot reveal any details:';
 }

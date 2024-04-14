@@ -1,23 +1,18 @@
-import {fetchInfo, fetchToken, getTaskData, postAnswer} from '../utils/utils.js';
+import {fetchToken, getTaskData, postAnswer, systemInfo} from '../utils/utils.js';
 import OpenAI from 'openai';
-
-const info = fetchInfo();
 
 const taskName = 'scraper';
 
-const apikey = info.apikey;
-const url = info.url;
-
-const openai = new OpenAI({apiKey: info.openAiKey});
+const openai = new OpenAI({apiKey: systemInfo.openAiKey});
 
 let accessToken;
 let question;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then(taskData => {
@@ -28,7 +23,7 @@ fetchToken(url, taskName, apikey)
         return getAnswerFromModel(text, question);
     })
     .then(answer => {
-        postAnswer(url, accessToken, answer);
+        postAnswer(accessToken, answer);
     })
     .catch(error => {
         console.error(`# Error: ${error}`);

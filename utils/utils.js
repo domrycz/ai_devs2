@@ -1,13 +1,17 @@
 import fs from 'fs';
 
-export const fetchInfo = () => {
-    const data = fs.readFileSync('data.json', 'utf8');
-    return JSON.parse(data);
+const readSystemInfoFromFile = () => {
+    const infoFile = fs.readFileSync('data.json', 'utf8');
+    console.log('### READ FILE ###');
+    return JSON.parse(infoFile);
 }
 
-export const fetchToken = async (url, taskName, apikey) => {
+export const systemInfo = readSystemInfoFromFile();
+
+export const fetchToken = async (taskName) => {
+    const apikey = systemInfo.apikey;
     try {
-        const response = await fetch(`${url}/token/${taskName}`, {
+        const response = await fetch(`${systemInfo.url}/token/${taskName}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ apikey })
@@ -22,9 +26,13 @@ export const fetchToken = async (url, taskName, apikey) => {
     }
 }
 
-export const getTaskData = async (url, token) => {
+export const getTaskData = async (token) => {
     try {
-        const response = await fetch(`${url}/task/${token}`);
+        let response = await fetch(`${systemInfo.url}/task/${token}`);
+        if(response.status === 429) {
+            await sleep(10000);
+            response = await fetch(`${systemInfo.url}/task/${token}`);
+        }
         const data = await response.json();
 
         if (data.code !== 0) throw new Error(data.msg);
@@ -34,12 +42,13 @@ export const getTaskData = async (url, token) => {
         return data;
     } catch (error) {
         console.error(`Error fetching task data: ${error}`);
+        throw error;
     }
 }
 
-export const postAnswer = async (url, token, answer) => {
+export const postAnswer = async (token, answer) => {
     try {
-        const response = await fetch(`${url}/answer/${token}`, {
+        const response = await fetch(`${systemInfo.url}/answer/${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

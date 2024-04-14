@@ -1,19 +1,14 @@
-import { fetchInfo, fetchToken, postAnswer } from '../utils/utils.js';
+import {fetchToken, postAnswer, systemInfo} from '../utils/utils.js';
 import OpenAI from "openai";
-
-const info = fetchInfo();
 
 const taskName = 'embedding';
 const sentenceToProcess = 'Hawaiian pizza';
 
-const apikey = info.apikey;
-const url = info.url;
-
-const openai = new OpenAI({apiKey: info.openAiKey});
+const openai = new OpenAI({apiKey: systemInfo.openAiKey});
 
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
@@ -21,7 +16,7 @@ fetchToken(url, taskName, apikey)
         }
     })
     .then(embedding => {
-        postAnswer(url, accessToken, embedding);
+        postAnswer(accessToken, embedding);
     })
     .catch(error => {
         console.error(`# Error: ${error}`);

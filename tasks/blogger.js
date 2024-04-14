@@ -1,20 +1,17 @@
-import { fetchInfo, fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
+import {fetchToken, getTaskData, postAnswer, systemInfo} from '../utils/utils.js';
 import OpenAI from "openai";
 
-const info = fetchInfo();
-
 const taskName = 'blogger';
-const apikey = info.apikey;
-const url = info.url;
-const openAiKey = info.openAiKey;
+
+const openAiKey = systemInfo.openAiKey;
 
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then(taskData => {
@@ -22,11 +19,10 @@ fetchToken(url, taskName, apikey)
         return writeContent(chaptersTitles, openAiKey);
     })
     .then(arrayWithChapters => {
-        const answer = {answer: arrayWithChapters};
-        postAnswer(url, accessToken, arrayWithChapters);
+        postAnswer(accessToken, arrayWithChapters);
     })
     .catch(error => {
-        console.error(`Error: ${error}`);
+        console.error(`# Error: ${error}`);
     })
 
 const writeContent = async (chaptersTitles, openAiKey) => {

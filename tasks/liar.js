@@ -1,33 +1,29 @@
-import { fetchInfo, fetchToken, postAnswer } from '../utils/utils.js';
-
-const info = fetchInfo();
+import { fetchToken, postAnswer, systemInfo } from '../utils/utils.js';
 
 const taskName = 'liar';
-const apikey = info.apikey;
-const url = info.url;
 
 const question = 'What is the biggest planet in our solar system?';
 const correctAnswer = 'Jupiter';
 
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
-            return sendQuestion(url, token, question);
+            return sendQuestion(token);
         }
     }).then(modelAnswer => {
         const answer = modelAnswer.includes(correctAnswer) ? 'YES' : 'NO';
-        postAnswer(url, accessToken, answer);
+        postAnswer(accessToken, answer);
     }).catch(error => {
         console.error(`Error: ${error}`);
     })
 
 
-const sendQuestion = async (url, token) => {
+const sendQuestion = async (token) => {
     try {
-        const response = await fetch(`${url}/task/${token}`, {
+        const response = await fetch(`${systemInfo.url}/task/${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `question=${encodeURIComponent(question)}`

@@ -1,26 +1,20 @@
-import { fetchInfo, fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
-
-const info = fetchInfo();
+import { fetchToken, getTaskData, postAnswer } from '../utils/utils.js';
 
 const taskName = 'helloapi';
 
-const apikey = info.apikey;
-const url = info.url;
-
 let accessToken;
 
-
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if(token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then((data) => {
         const cookie = data.cookie;
-        postAnswer(url, accessToken, cookie);
+        postAnswer(accessToken, cookie);
     })
     .catch(error => {
-        console.log(`Error: ${error}`);
+        console.log(`# Error: ${error}`);
     });

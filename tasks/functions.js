@@ -1,23 +1,18 @@
-import {fetchInfo, fetchToken, getTaskData, postAnswer} from '../utils/utils.js';
-
-const info = fetchInfo();
+import {fetchToken, getTaskData, postAnswer} from '../utils/utils.js';
 
 const taskName = 'functions';
 
-const apikey = info.apikey;
-const url = info.url;
-
 let accessToken;
 
-fetchToken(url, taskName, apikey)
+fetchToken(taskName)
     .then(token => {
         if (token) {
             accessToken = token;
-            return getTaskData(url, accessToken);
+            return getTaskData(accessToken);
         }
     })
     .then(() => {
-        postAnswer(url, accessToken, buildFunctionDefinition());
+        postAnswer(accessToken, buildFunctionDefinition());
     })
     .catch(error => {
         console.error(`# Error: ${error}`);
