@@ -64,3 +64,7 @@ export const postAnswer = async (token, answer) => {
         console.error(`Error posting task answer: ${error}`);
     }
 }
+
+export const sleep = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
