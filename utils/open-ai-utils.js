@@ -21,3 +21,19 @@ export const callModeration = async (openAiKey, inputToCheck) => {
         throw new Error(`Error calling moderation: ${error}`);
     }
 }
+
+export const askOpenAIModel = async (openai, model, systemInstructions, question) => {
+    let chatResponse;
+    try {
+        chatResponse = await openai.chat.completions.create({
+            messages: [
+                {role: "system", content: systemInstructions},
+                {role: "user", content: question}
+            ],
+            model: model,
+        });
+    } catch (error) {
+        throw new Error(`Error asking Chat GPT ${question}: ${error}`);
+    }
+    return chatResponse.choices[0].message.content;
+}
