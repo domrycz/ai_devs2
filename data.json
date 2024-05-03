@@ -1,5 +1,6 @@
 {
   "url": "<URL HERE>",
   "apikey": "<API KEY HERE>",
-  "openAiKey": "<OPEN AI KEY HERE>"
+  "openAiKey": "<OPEN AI KEY HERE>",
+  "renderFormApiKey": "<RENDER FORM API KEY HERE>"
 }
