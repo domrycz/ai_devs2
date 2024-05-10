@@ -6,6 +6,7 @@ const openai = new OpenAI({apiKey: systemInfo.openAiKey});
 const taskName = 'optimaldb';
 
 let accessToken;
+
 fetchToken(taskName)
     .then(token => {
         if (token) {
